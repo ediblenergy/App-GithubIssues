@@ -10,11 +10,12 @@ my $pithub =
   Pithub->new( token => $api_token, user => $user, repo => $repo );
 sub format_bug {
     my $issue = shift;
-    return sprintf( "[ created by: %s ] [ assigned to: %s ] [ %s ]\n%s\n",
-        $issue->{user}{login},
-        ( $issue->{assignee} ? $issue->{assignee}{login} : "N/A" ),
-        $issue->{title},
-        $issue->{html_url} );
+    my @labels = map { "$_->{name}" } @{ $issue->{labels} };
+    my $assigned = $issue->{assignee} ? $issue->{assignee}{login} : 'N/A';
+    my $ret =  "[ $issue->{title} ]  [ assigned to: $assigned ]  [ created by: $issue->{user}{login} ]"
+        ."\n$issue->{html_url}\n";
+    $ret .= "labels: ${\ join(',' => @labels ) }\n" if (@labels);
+    $ret .= "\n";
 }
 my $issues = $pithub->issues->list;
 while( my $issue = $issues->next ) {
