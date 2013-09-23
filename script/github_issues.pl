@@ -12,7 +12,7 @@ sub format_bug {
     my $issue = shift;
     my @labels = map { "$_->{name}" } @{ $issue->{labels} };
     my $assigned = $issue->{assignee} ? $issue->{assignee}{login} : 'N/A';
-    my $ret =  "[ $issue->{title} ]  [ assigned to: $assigned ]  [ created by: $issue->{user}{login} ]"
+    my $ret =  "[ $issue->{title} ]  [ assigned to: $assigned ]  [ created by: $issue->{user}{login} ] [ updated: $issue->{updated_at} ]"
         ."\n$issue->{html_url}\n";
     $ret .= "labels: ${\ join(',' => @labels ) }\n" if (@labels);
     $ret .= "\n";
