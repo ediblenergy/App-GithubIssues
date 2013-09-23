@@ -17,6 +17,7 @@ sub format_bug {
     $ret .= "labels: ${\ join(',' => @labels ) }\n" if (@labels);
     $ret .= "\n";
 }
+
 my $issues = $pithub->issues->list;
 while( my $issue = $issues->next ) {
     print format_bug($issue);
