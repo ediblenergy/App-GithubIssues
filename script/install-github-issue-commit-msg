@@ -1,0 +1,18 @@
+#!/usr/bin/env perl
+use FindBin;
+use File::Spec;
+my $hook = File::Spec->catfile("$FindBin::Bin","github-issue-commit-msg");
+unless( -e $hook ) {
+    die "$hook doesn't exist!";
+}
+my $gitdir = `git rev-parse --git-dir` or die "$@ $!";
+chomp($gitdir);
+unless( $gitdir ) {
+    die "Not in a git repo!";
+}
+my $new_hook = File::Spec->catfile($gitdir,"hooks","commit-msg");
+if( -e $new_hook  || -f $new_hook) {
+    die "$new_hook already exists. Not overwriting.";
+}
+symlink($hook,$new_hook) or die "$@ $!";
+print "$new_hook symlinked from $hook.\n";
