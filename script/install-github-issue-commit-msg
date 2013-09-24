@@ -16,3 +16,9 @@ if( -e $new_hook  || -f $new_hook) {
 }
 symlink($hook,$new_hook) or die "$@ $!";
 print "$new_hook symlinked from $hook.\n";
+my $ticketprefix = `git config --get core.ticketprefix`;
+chomp($ticketprefix);
+unless( $ticketprefix ) {
+    print "Your ticket prefix is unset.","\n",
+    "Set it with 'git config --add core.ticketprefix 'MyOrg/MyTicketRepo'\n";
+}
