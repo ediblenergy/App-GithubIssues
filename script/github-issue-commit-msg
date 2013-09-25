@@ -30,4 +30,3 @@ if ( $ticket and !_has_ticket_info ) {
     print $fh $tagit, "\n";
     close($fh);
 }
-
