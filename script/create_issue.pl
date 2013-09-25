@@ -1,3 +1,4 @@
+#!/usr/bin/env perl
 use strict;
 use warnings FATAL => 'all';
 use utf8;
@@ -18,9 +19,17 @@ sub format_bug {
 }
 
 my $api_token = $ENV{GH_API_TOKEN} or die '$ENV{GH_API_TOKEN} required';
-
-my $user   = $ARGV[0];
-my $repo   = $ARGV[1];
+my $ticket_prefix = `git config  --get core.ticketprefix`;
+chomp($ticket_prefix);
+unless ($ticket_prefix) {
+    warn "Please set core.ticketprefix to use this commitmsg hook.", "\n",
+      "git config --add  core.ticketprefix 'MyOrg/MyTicketRepo'";
+    exit 0;
+}
+my ($user,$repo) = split(/\//,$ticket_prefix);
+die "invalid user from $ticket_prefix" unless $user;
+die "invalid repo from $ticket_prefix" unless $repo;
+print "user:$user \t repo:$repo","\n";
 my $pithub = Pithub->new( token => $api_token, user => $user, repo => $repo );
 print "Issue title: ";
 my $title = <STDIN>;
@@ -33,7 +42,4 @@ my $issue = $pithub->issues->create(
     data => {
         title => $title,
     } );
-
 print format_bug( $issue->content );
-
-
