@@ -13,7 +13,7 @@ unless ($ticket_prefix) {
 my $commit_file = $ARGV[0] or die "no commit file specified!";
 my $branch = `git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3 `;
 chomp($branch);
-my ($ticket) = $branch =~ m/\.ticket[-|_](\d+)\./g;
+my ($ticket) = $branch =~ m/ticket[-|_](\d+)/g;
 exit(0) unless($ticket);
 my $tagit = "$ticket_prefix#$ticket";
 
